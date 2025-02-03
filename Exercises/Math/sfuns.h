@@ -6,5 +6,6 @@
 
 // Function declarations
 double fgamma(double);
+double ln_gamma(double);
 
 #endif // SFUNS_H
