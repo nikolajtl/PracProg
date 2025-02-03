@@ -1,0 +1,8 @@
+#include "sfuns.h"
+
+double fgamma(double x){
+    if(x<0) return std::numbers::pi/std::sin(std::numbers::pi*x)/fgamma(1-x); // Euler's reflection formula
+    if(x<9) return fgamma(x+1)/x; // Recurrence relation
+    double lnfgamma=x*std::log(x+1/(12*x-1/x/10))-x+std::log(2*std::numbers::pi/x)/2;
+    return std::exp(lnfgamma);
+}
