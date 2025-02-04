@@ -17,4 +17,5 @@ int main(){
     for (int n = 1; n <= 10; n++){
         std::cout << fgamma(n) << std::endl;
     }
+    return 0;
 }
