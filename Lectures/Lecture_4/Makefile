@@ -29,3 +29,6 @@ Out.txt: main.exe main
 # Build main executable
 main.exe: main.cc
 	$(MKEXE)
+
+clean:
+	rm -f *.exe *.so Out.txt
