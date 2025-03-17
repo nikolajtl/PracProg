@@ -1,0 +1,4 @@
+Square root of -1: (0,1), it seems to pick the 'positive' version: 0
+ln(i): (0,1.5708)
+Square root of i: (0.707107,0.707107), the reference states that the values are chosen in the right half-plane.
+i^i: (0.20788,0)
