@@ -11,13 +11,13 @@ SRC      = Linear_Equations.cc
 TIMING_TARGET = Timing.exe
 TIMING_SRC    = Timing.cc
 
-# Linspace-like range: customize these values
+# Linspace-like range:
 START    = 100      # Start of the range
 END      = 2000     # End of the range
 STEP     = 100       # Step size
 
 # Default target: build both executables
-all: $(TARGET) $(TIMING_TARGET)
+all: $(TARGET) $(TIMING_TARGET) run timing plot
 
 # Compile LinEq.exe
 $(TARGET): $(SRC)
@@ -27,8 +27,12 @@ $(TARGET): $(SRC)
 $(TIMING_TARGET): $(TIMING_SRC)
 	$(CXX) $(CXXFLAGS) -o $(TIMING_TARGET) $(TIMING_SRC) $(LDFLAGS)
 
+run: $(TARGET)
+	./$(TARGET)
+
 # Run timing tests with linspace-like range and save to timing.txt
 timing: $(TIMING_TARGET)
+	@echo "Timing the QR-factorization for different matrix sizes:"
 	@echo "# N Time(s)" > timing.txt
 	@for n in $$(seq $(START) $(STEP) $(END)); do \
 		echo "Running for N = $$n..."; \
@@ -39,7 +43,7 @@ timing: $(TIMING_TARGET)
 plot: timing.txt
 	gnuplot -e "\
 	set terminal pdf; set output 'timing_plot.pdf'; \
-	set xlabel 'N'; set ylabel 'Time (s)'; \
+	set xlabel 'N [-]'; set ylabel 'Time [s]'; \
 	set xrange [0 : $(END)*1.1]; \
 	set yrange [-1 : 25]; \
 	f(x) = a * x**3; \

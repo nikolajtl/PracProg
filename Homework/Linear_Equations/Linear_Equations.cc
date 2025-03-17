@@ -7,7 +7,7 @@ bool approx(double a, double b, double abs_prec=1e-9, double rel_prec=1e-9){
     if (std::abs(b-a) <= abs_prec) return true;
     if (std::abs(b-a)/std::max(a, b) <= rel_prec) return true;
     return false;
-}
+};
 
 struct vect {
     std::vector<double> entries;
