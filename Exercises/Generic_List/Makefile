@@ -1,15 +1,23 @@
 CXX = clang++
 CXXFLAGS += -Wall -std=c++20 -O2
 
-.PHONY: all clean
+.PHONY: all clean run
 
-all: genlist.exe
+# Default target to compile the program
+all: genlist.exe run
 
-genlist.o: genlist.cc genlist.h
-	$(CXX) $(CXXFLAGS) -c -o genlist.o genlist.cc
+# Rule to create the executable from main.o
+genlist.exe: main.o
+	$(CXX) $(CXXFLAGS) -o genlist.exe main.o
 
-genlist.exe: genlist.o
-	$(CXX) $(CXXFLAGS) -o genlist.exe genlist.o
+# Rule to compile main.cc into main.o
+main.o: main.cc
+	$(CXX) $(CXXFLAGS) -c main.cc -o main.o
 
+# Rule to clean up generated files
 clean:
-	$(RM) genlist.exe genlist.o
+	$(RM) genlist.exe main.o output.txt
+
+# Run the program with input redirection and output redirection
+run: genlist.exe
+	./genlist.exe < inputfile.txt > output.txt

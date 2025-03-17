@@ -1,58 +1,71 @@
 #ifndef HAVE_GENLIST_H
 #define HAVE_GENLIST_H
+
 #include <stddef.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <iostream>
+
 #define SELF (*this)
-#define FOR(i) for(int i=0;i<Size;i++)
+#define FOR(i) for(int i=0; i<Size; i++)
 
-template < typename T > class genlist {
+template <typename T>
+class genlist {
+private:
+    int Size;
+    T* data; /* C-array */
 
-private: int Size; T *data; /* C-array */
-public : const int& size=Size;
+public:
+    const int& size = Size;
 
-T& operator[](int i){
-	assert(i >= 0 && i < Size);
-	return data[i];
-	}
+    // Non-const version (for modification)
+    T& operator[](int i) {
+        assert(i >= 0 && i < Size);
+        return data[i];
+    }
 
-genlist() { /* default ctor */
-	data = nullptr;
-	Size = 0;
-	}
+    // Const version (for reading from const objects)
+    const T& operator[](int i) const {
+        assert(i >= 0 && i < Size);
+        return data[i];
+    }
 
-genlist(genlist& other){ /* copy ctor */
-	Size=other.size;
-	data = new T[Size]();
-	FOR(i) SELF[i]=other[i];
-	}
+    genlist() { /* default constructor */
+        data = nullptr;
+        Size = 0;
+    }
 
-genlist(genlist&&) = delete; /* move ctor */
+    genlist(const genlist& other) { /* copy constructor */
+        Size = other.size;
+        data = new T[Size]();
+        FOR(i) SELF[i] = other[i];  // Now works with const objects
+    }
 
-~genlist() { /* dtor */
-	delete[] data;
-	Size = 0;
-	}
+    genlist& operator=(const genlist& other) { /* copy assignment */
+        if (this != &other) {
+            delete[] data;
+            Size = other.size;
+            data = new T[Size]();
+            FOR(i) SELF[i] = other[i];  // Now works with const objects
+        }
+        return *this;
+    }
 
-genlist& operator=(genlist& other){ /* copy assignment */
-	SELF.~genlist();
-	Size=other.size;
-	data = new T[Size]();
-	FOR(i) SELF[i]=other[i];
-	return SELF;
-	}
+    genlist(genlist&&) = delete; /* move constructor */
+    genlist& operator=(genlist&&) = delete; /* move assignment */
 
-genlist& operator=(genlist&&) = delete; /* move assignment */
+    ~genlist() { /* destructor */
+        delete[] data;
+    }
 
-void add(T item) {
-	T *newdata = new T[Size+1]();
-	FOR(i)newdata[i]=data[i];
-	newdata[Size] = item;
-	Size++;
-	delete[] data;
-	data=newdata;
-	}
-
+    void add(T item) {
+        T* newdata = new T[Size + 1]();
+        FOR(i) newdata[i] = data[i];
+        newdata[Size] = item;
+        Size++;
+        delete[] data;
+        data = newdata;
+    }
 };
+
 #endif

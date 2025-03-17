@@ -19,7 +19,7 @@ DATA_FILE_GAMMA = data_gamma.txt
 DATA_FILE_LNGAMMA = data_lngamma.txt
 
 # Default rule to build the executable
-all: $(TARGET)
+all: $(TARGET) run plot
 
 # Link object files to create the final executable
 $(TARGET): $(OBJ)
@@ -36,7 +36,6 @@ clean:
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
-	$(MAKE) plot
 
 # Generate the plot using gnuplot
 plot: $(DATA_FILE_ERF) $(DATA_FILE_GAMMA)

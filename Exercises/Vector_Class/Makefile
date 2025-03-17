@@ -1,10 +1,13 @@
-all: vec.exe vec.txt
+all: vec.exe vector_class.so vec.txt
 
-vec.exe: vec_main.cc vec_class.cc vec_class.h
-	clang++ vec_main.cc vec_class.cc -o vec.exe
+vec.exe: main.cc vec_class.cc vec_class.h
+	clang++ main.cc vec_class.cc -o vec.exe
+
+vector_class.so: vec_class.cc
+	clang++ -shared -fPIC vec_class.cc -o vector_class.so
 
 vec.txt: vec.exe
 	./vec.exe > vec.txt
 
 clean:
-	$(RM) vec.exe vec.txt
+	rm -f vec.exe vec.txt vector_class.so

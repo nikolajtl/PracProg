@@ -1,4 +1,5 @@
 #include "vec_class.h"
+#include <iostream>
 
 vector3D::vector3D() : x(0), y(0), z(0) {}
 
@@ -81,4 +82,9 @@ vector3D vector3D::operator/(double scalar) const {
 // Left scalar multiplication
 vector3D operator*(double scalar, const vector3D& vec) {
     return vec * scalar;
+}
+
+std::ostream& operator<<(std::ostream& os, const vector3D& v){
+    os << "{ " << v.x << ", " << v.y << ", " << v.z << " } ";
+    return os;
 }
