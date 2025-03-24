@@ -1,0 +1,4 @@
+Value of the first test integral (should be 2/3): 0.666667
+Value of the second test integral (should be 2): 2
+Value of the third test integral (should be pi): 3.14159
+Value of the fourth test integral (should be -4): -4

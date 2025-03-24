@@ -81,20 +81,19 @@ vector operator-(const vector& a, const vector& b){
 	r-=b;
 	return r; }
 
-NUMBER vector::dot(const vector& other) const {
+double vector::dot(const vector& other) const {
     if (data.size() != other.data.size()) {
         throw std::invalid_argument("Vectors must be the same length for dot product.");
     }
 
-    NUMBER result = 0.0;
-    for (size_t i = 0; i < data.size(); i++) {  // Change 'int' to 'size_t'
+    double result = 0.0;
+    for (int i=0; i < data.size(); i++) {
         result += data[i] * other.data[i];
     }
     return result;
 }
 
-
-NUMBER vector::norm() const {
+double vector::norm() const {
     return std::sqrt(this->dot(*this));
 }
 
