@@ -26,7 +26,7 @@ ploterf: erfdata.txt
 plotconv: convdata.txt
 	gnuplot -e "\
 	set terminal pdf; set output 'convplot.pdf'; \
-	set xlabel 'acc'; set ylabel 'erf(1)'; \
+	set xlabel 'acc'; set ylabel '|myerf(1) - erf(1)|'; \
 	set xrange [1e-10 : 1]; set yrange [1e-15 : 1e-3]; \
 	set logscale x; set logscale y; \
 	plot 'convdata.txt' using 1:2 with points notitle "
