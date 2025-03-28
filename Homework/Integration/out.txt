@@ -1,4 +1,17 @@
-Value of the first test integral (should be 2/3): 0.666667
-Value of the second test integral (should be 2): 2
-Value of the third test integral (should be pi): 3.14159
-Value of the fourth test integral (should be -4): -4
+Everything done for acc=0.0001, eps=0.0001
+Value of the first A) test integral (should be 2/3): 0.666681
+Value of the second A) test integral (should be 2): 2
+Value of the third A) test integral (should be pi): 3.1416
+Value of the fourth A) test integral (should be -4): -4
+Value of the first B) test integral (should be 2): 2
+Value of the second B) test integral (should be -4): -4
+Value and error of the Gaussian integral, should be sqrt(pi), around 1.77245: 1.77237, 8.2599e-05
+Actual error: 7.97048e-05
+Ncalls for Gaussian integral: 87
+
+For the scipy.integrate.quad routine, same absolute and relative error: 
+Value:  1.7724538509067376
+Estimated error:  4.316364671314715e-06
+Actual error:  1.2214673716925972e-12
+Number of evaluations:  150
+So quad seems to underestimate the error, and so has an unnecesarryily large number of calls

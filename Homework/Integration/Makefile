@@ -16,6 +16,7 @@ $(TARGET): $(SRC)
 
 run: $(TARGET)
 	./$(TARGET)
+	python3 compare.py
 
 ploterf: erfdata.txt
 	gnuplot -e "\
