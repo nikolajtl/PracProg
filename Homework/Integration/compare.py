@@ -20,4 +20,4 @@ with open("out.txt", "a") as f:
     print("Estimated error: ", error, file=f)
     print("Actual error: ", np.abs(value - sqrt_pi), file=f)
     print("Number of evaluations: ", N, file=f)
-    print("So quad seems to underestimate the error, and so has an unnecesarryily large number of calls", file=f)
+    print("So quad seems to underestimate the error, and so has an unnecessarily large number of calls", file=f)

@@ -1,0 +1,7 @@
+Results for plain Monte Carlo:
+Value of singular integral (note the increase of a factor pi^3): 43.1885, expected value of integral: 43.1981
+Actual error: 0.0096071 , calculated error: 0.101609
+
+Results for quasi-random Monte Carlo:
+Value of singular integral (note the increase of a factor pi^3): 43.395, expected value of integral: 43.1981
+Actual error: 0.196956 , calculated error: 0.0263349

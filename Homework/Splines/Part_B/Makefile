@@ -22,7 +22,7 @@ plot: data.txt
 	set xrange [-1 : 11]; \
 	set yrange [-1.2 : 2.2]; \
 	plot 'data.txt' using 1:2 with points title 'Data', \
-		'splinedata.txt' with lines title 'Linear Spline', \
+		'splinedata.txt' with lines title 'Quadratic Spline', \
 		'integraldata.txt' with lines linestyle 1 dashtype 2 title 'Integral of spline' "
 
 clean:
