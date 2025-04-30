@@ -1,0 +1,15 @@
+Rosenbrock's valley function minimum: 
+
+        1         1 
+Himmelblau's function minima: 
+
+        3         2 
+
+   -2.805     3.131 
+
+   -3.779    -3.283 
+
+    3.584    -1.848 
+Hydrogen atom ground state energy for Eguess = -1: 
+
+  -0.5549 

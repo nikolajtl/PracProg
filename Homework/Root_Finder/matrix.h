@@ -31,6 +31,12 @@ struct vector {
 	vector& operator/=(NUMBER);
 	bool operator==(const vector& other) const; // Vector equality operator
 	void print(std::string s="",FILE* stream=stdout) const;
+	// Add these to pp::vector to enable usage of std algorithms
+	auto begin() { return data.begin(); }
+	auto end() { return data.end(); }
+	
+	const auto begin() const { return data.begin(); }
+	const auto end() const { return data.end(); }
 };
 
 vector operator+(const vector&, const vector&);
