@@ -1,0 +1,33 @@
+Find all minima with forward difference: 
+Rosenbrock valley function minimum: 
+
+        1         1 
+Found in 23 steps from starting guess (4, 5)
+
+One of the Himmelblau function's local minima: 
+
+        3         2 
+Found in 6 steps from starting guess (2.5, 3.5)
+
+Optimal parameters for the Higgs Breit-Wigner (m, Γ, A): 
+
+      126     2.086     9.876 
+Found in 3293 steps from starting guess (125, 5, 25). The χ2 value is 26.8695
+
+Find all minima with central difference: 
+Rosenbrock valley function minimum: 
+
+        1         1 
+Found in 107 steps from starting guess (4, 5)
+
+One of the Himmelblau function's local minima: 
+
+        3         2 
+Found in 6 steps from starting guess (2.5, 3.5)
+
+Optimal parameters for the Higgs Breit-Wigner (m, Γ, A): 
+
+      126     2.086     9.876 
+Found in 118 steps from starting guess (125, 5, 25). The χ2 value is 26.8695
+
+All done for accuracy 1e-06. It seems to vary from function to function which method is more effective.
