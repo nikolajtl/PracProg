@@ -22,7 +22,7 @@ plot: funcvals.txt
 	set terminal pdf; set output 'plot.pdf'; \
 	set xlabel 'x'; set ylabel 'y'; \
 	set xrange [-8 : 8]; set yrange [-5 : 15]; set size ratio -1; \
-	plot 'funcvals.txt' using 1:2 with lines linestyle 2 title 'Solution' "
+	plot 'funcvals.txt' using 1:2 with lines linestyle 2 title 'Relativistic orbit' "
 
 clean:
 	rm -f $(TARGET) $(OBJ) funcvals.txt plot.pdf
