@@ -22,7 +22,7 @@ std::vector<double> linspace(double start, double end, int num_points) {
         result.push_back(start + i * step);
     }
     return result;
-}
+};
 
 
 // Multiply matrices

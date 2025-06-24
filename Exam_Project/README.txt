@@ -1,0 +1,10 @@
+Nikolaj Thinggaard Lund, 202104637, examination project nr. 10; Lanczos tridiagonalization algorithm
+https://github.com/nikolajtl/PracProg, "Exam_Project" folder
+
+The 'main.cc' file contains the principal implementation of the Lanczos tridiagonalization algorithm, done for some randomly generated q_1 vector and symmetric matrix A. The output is piped into the 'out_main.txt' file, where matrices are printed to illustrate that the algorithm works as intended.
+
+In 'hydrogen.cc', the decomposition is used alongside a simple QR diagonalization algorithm to apply the Lanczos method to the hydrogen atom Hamiltonian. An example output is piped into 'out_hydrogen.txt', and several resulting ground state energies for various n are written to 'convergence.txt', which is plotted in 'convplot.pdf'.
+
+The Krylov subspace method has some significant issues for application to the hydrogen wavefunctions. Since the mean radius of hydrogen goes as the principal quantum number squared, and the matrix size N is subject to the condition r_max = N*delta_r, the matrix will always contain traces of eigenvalues from the infinite well, which are much larger and non-negative, so to get the Lanczos algorithm to produce the correct result, I essentially had to set q_1 equal to the analytic ground state solution with some added random noise. However, this is more of an issue with the application of the algorithm than my implementation, so I've assumed that this suffices for a solution to the given problem.
+
+I initially believed that a Givens rotation would preserve the tridiagonal form of a matrix, and so that the Jacobi EVD algorithm could be modified to take advantage of this, but after attempting to do so in 'jacobi.cc' and reading further up on it, I've discovered that the Givens rotations don't preserve tridiagonality, and so I don't believe one can improve the Jacobi EVD algorithm itself to be faster for tridiagonal matrices.

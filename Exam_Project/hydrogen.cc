@@ -7,6 +7,18 @@
 
 
 
+std::vector<double> linspace(double start, double end, int num_points) {
+    std::vector<double> result;
+    double step = (end - start) / (num_points - 1);  // Calculate step size
+
+    for (int i = 0; i < num_points; ++i) {
+        result.push_back(start + i * step);
+    }
+    return result;
+};
+
+
+
 struct QR {
     pp::matrix A, Q, R;
 
@@ -106,6 +118,44 @@ struct QR {
 
 
 
+// Takes matrix A=A_k as input, decomposes A_k = Q_k R_k, and returns A_{k+1} = R_k Q_k
+pp::matrix QR_updater(pp::matrix A) {
+    QR decomp(A);
+    pp::matrix Q = decomp.Q;
+    pp::matrix R = decomp.R;
+
+    return (R * Q);
+};
+
+// Uses the updater for at most k_max iterations to diagonalize the input A, given some precision
+pp::matrix QR_diag(pp::matrix A, double acc, int k_max=1000) {
+    int Adim = A.size1();
+    if (Adim != A.size2()) std::cerr << "Error: Attempted diagonalization of non-square matrix" << std::endl;
+
+    pp::matrix A_k = A;
+    for (int k=0; k<k_max; k++) {
+        A_k = QR_updater(A_k);
+
+        // Check convergence: are the off-diagonal elements small?
+        bool converged = true;
+        for (int i=0; i < Adim-1; i++) {
+            if (std::abs(A_k(i + 1, i)) > acc) {
+                converged = false;
+                break;
+            }
+        }
+        
+        if (converged) break;
+
+        // Debugging
+        // std::cout << k << std::endl;
+    };
+
+    return A_k;
+};
+
+
+
 // First entry T, second Q
 std::pair<pp::matrix, pp::matrix> lanczos(const pp::matrix& A, pp::vector q_1, int dim) {
     int n = A.size1();
@@ -156,11 +206,6 @@ std::pair<pp::matrix, pp::matrix> lanczos(const pp::matrix& A, pp::vector q_1, i
             T(i + 1, i) = beta[i];
         };
     };
-    
-    // Debugging
-    // std::cout << std::endl;
-    // pp::vector test(alpha);
-    // test.print();
 
     return std::make_pair(T, Q);
 };
@@ -168,46 +213,52 @@ std::pair<pp::matrix, pp::matrix> lanczos(const pp::matrix& A, pp::vector q_1, i
 
 
 int main() {
-    int N = 8; // A is an N x N symmetric matrix
-    int n = 6; // n =< N, the resulting T_n is an n x n matrix
+    int N = 200; // A (here H) is an N x N symmetric matrix
+    int n = 10; // n =< N, the resulting T_n is an n x n matrix
 
-    // Make a random q_1 and symmetric A:
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dist(0.1, 10.0); // Random values between 0.1 and 10.0
-    
-    pp::vector q_1(N);
-    for (int i=0; i<q_1.size(); i++) q_1[i] = dist(gen);
-    std::cout << "Some random q_1: " << std::endl;
-    q_1.print();
+    double delta_r = 0.1;
+    double r_max = (N+1)*delta_r; // N+1 to fit with the boundary conditions as outlined in the eigenvalue homework
+    std::vector<double> rs = linspace(delta_r, r_max, N);
 
-    pp::matrix A(N, N);
-    for (int i=0; i<N; i++) {
-        for (int j=i; j<N; j++) {
-            double value = dist(gen);
-            A[i][j] = value;     // Set the upper triangular part
-            A[j][i] = value;     // Set the lower triangular part (symmetry)
+    // Make the Hamiltonian
+    pp::matrix H(N, N);
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            if (i==j) H[i][j] = 1/(delta_r*delta_r) - 1/rs[i];
+            if (i==j+1) H[i][j] = -1/(2*delta_r*delta_r);
+            if (i==j-1) H[i][j] = -1/(2*delta_r*delta_r);
         };
     };
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dist(0.1, 1.0); // Random values between 0.1 and 1.0
 
-    std::cout << "Some random symmetric N x N matrix A for N=" << N << std::endl;
-    A.print();
+    // q_1 is here taken to be the analytic ground state with random added noise
+    pp::vector q_1(N);
+    for (int i=0; i<q_1.size(); i++) q_1[i] = dist(gen) * rs[i] * std::exp(-rs[i]);
 
-    auto decomp = lanczos(A, q_1, n);
-    std::cout << "The Lanczos decomposition T of A for n=" << n << std::endl;
-    decomp.first.print();
+    auto decomp = lanczos(H, q_1, n);
+    pp::matrix T = decomp.first;
+    std::cout << "The n x n for n=" << n << " Lanczos T matrix of our N x N for N=" << N << " Hamiltonian: " << std::endl;
+    T.print();
 
-    pp::matrix Qtest = decomp.second;
+    pp::matrix T_diag = QR_diag(T, 1e-12);
+    std::cout << "The QR-diagonalized T: " << std::endl;
+    T_diag.print();
 
-    std::cout << "Computed Q^T A Q: " << std::endl;
-    pp::matrix Ttest = Qtest.transpose() * A * Qtest;
-    Ttest.print();
+    // Convergence check
+    std::vector<int> ns;
+    for (int i=5; i<20; i++) ns.push_back(i);
 
-    std::cout << "Computed Q^T Q for sanity check (should be identity): " << std::endl;
-    pp::matrix Itest = Qtest.transpose() * Qtest;
-    Itest.print();
-
-
+    std::ofstream convfile("convergence.txt");
+    for (int n_loop : ns) {
+        auto decomp_loop = lanczos(H, q_1, n_loop);
+        pp::matrix T_n = decomp_loop.first;
+        pp::matrix T_n_diag = QR_diag(T_n, 1e-12);
+        convfile << n_loop << " " << T_n_diag[n_loop-1][n_loop-1] << std::endl;
+    };
+    convfile.close();
 
     return 0;
 };
